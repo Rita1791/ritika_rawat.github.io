@@ -8,7 +8,7 @@
 
 **Bioinformatics Associate Researcher · Mumbai, India**
 
-I study how evolutionary constraint and genomic variation can help us identify biologically important signals — while keeping the boundary between computational evidence and biological mechanism explicit.
+I study how evolutionary constraint and genomic variation can help us identify biologically important signals, while keeping the boundary between computational evidence and biological mechanism explicit.
 
 <br>
 
