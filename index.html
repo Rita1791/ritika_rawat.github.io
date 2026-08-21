@@ -6,7 +6,7 @@
     <meta name="description" content="Research portfolio of Ritika Rajendra Rawat: evolutionary cancer genomics, TP53 comparative analysis, WGS benchmarking and experimental analytical sciences.">
     <meta name="author" content="Ritika Rajendra Rawat">
     <meta name="keywords" content="computational biology, bioinformatics, comparative genomics, cancer genomics, TP53, WGS benchmarking, Ritika Rawat">
-    <meta name="theme-color" content="#fbfbf7">
+    <meta name="theme-color" content="#f6f3ec">
     <meta property="og:title" content="Ritika Rajendra Rawat — Computational Biology Research Portfolio">
     <meta property="og:description" content="Evolutionary cancer genomics, TP53 comparative analysis, WGS benchmarking and experimental analytical sciences.">
     <meta property="og:type" content="website">
@@ -100,7 +100,7 @@
       padding: 10px 15px;
       border-radius: 99px;
       background: var(--forest);
-      color: white;
+      color: var(--on-accent);
       }
       .mobile-menu { display: none; }
       main { overflow: hidden; }
@@ -156,7 +156,7 @@
       transition: transform .18s ease, background .18s ease, border-color .18s ease;
       }
       .button:hover { transform: translateY(-2px); }
-      .button-primary { background: var(--forest); color: white; }
+      .button-primary { background: var(--forest); color: var(--on-accent); }
       .button-primary:hover { background: #0c302c; }
       .button-secondary { border-color: var(--line); background: rgba(255,255,255,.18); }
       .button-secondary:hover { border-color: var(--forest); }
@@ -515,34 +515,37 @@
       }
       /* Academic portfolio refresh — influenced by modern research-lab sites. */
       :root {
-      --paper: #fbfbf7;
-      --paper-2: #f1f3f5;
-      --white: #ffffff;
-      --ink: #151a1f;
-      --muted: #5d6772;
-      --line: rgba(21, 26, 31, .14);
-      --forest: #155f9b;
-      --forest-2: #276f9f;
-      --mint: #dcecf6;
-      --mint-light: #edf5fa;
-      --orange: #bd7a17;
-      --orange-light: #efd6a5;
-      --blue: #155f9b;
+      --paper: #f6f3ec;
+      --paper-2: #ece8df;
+      --white: #fffefa;
+      --ink: #151719;
+      --muted: #666b6d;
+      --line: rgba(21, 23, 25, .14);
+      --forest: #294a53;
+      --forest-2: #466a72;
+      --mint: #d9e2e0;
+      --mint-light: #edf1ef;
+      --orange: #a77d45;
+      --orange-light: #e6d4b9;
+      --blue: #294a53;
+      --on-accent: #ffffff;
       color-scheme: light;
       }
       :root[data-theme="dark"] {
-      --paper: #101419;
-      --paper-2: #171d23;
-      --white: #151b21;
-      --ink: #edf2f5;
-      --muted: #a6b1bb;
-      --line: rgba(237, 242, 245, .16);
-      --forest: #4e9bd3;
-      --forest-2: #78b7e2;
-      --mint: #17354a;
-      --mint-light: #173047;
-      --orange: #d8a64f;
-      --orange-light: #4b3a1f;
+      --paper: #0c0f11;
+      --paper-2: #14191c;
+      --white: #111619;
+      --ink: #f3efe7;
+      --muted: #a7acae;
+      --line: rgba(243, 239, 231, .15);
+      --forest: #6d9ea8;
+      --forest-2: #96b8be;
+      --mint: #203238;
+      --mint-light: #16272c;
+      --orange: #c9a767;
+      --orange-light: #4a3b25;
+      --blue: #6d9ea8;
+      --on-accent: #0c0f11;
       color-scheme: dark;
       }
       body { transition: background-color .2s ease, color .2s ease; }
@@ -647,11 +650,11 @@
       .hero-role {
       max-width: 680px;
       margin: 24px 0 0;
-      color: #4c5863;
+      color: var(--muted);
       font-size: clamp(17px, 1.45vw, 21px);
       line-height: 1.5;
       }
-      :root[data-theme="dark"] .hero-role { color: #c0cad2; }
+      :root[data-theme="dark"] .hero-role { color: var(--muted); }
       .hero-lede {
       max-width: 740px;
       margin-top: 21px;
@@ -792,7 +795,7 @@
       :root[data-theme="dark"] .featured-project,
       :root[data-theme="dark"] .eccb-section { background: #0c2536; }
       :root[data-theme="dark"] .contact-section { background: #142d3b; }
-      :root[data-theme="dark"] footer { background: #090d11; }
+      :root[data-theme="dark"] footer { background: #080a0c; }
       @media (max-width: 1050px) {
       .site-header { gap: 14px; }
       .theme-toggle { margin-left: auto; }
@@ -862,8 +865,8 @@
       .research-loop { border-color: var(--ink); }
       .loop-step:not(:last-child)::after { background: var(--paper-2); }
       .wetlab-project { border-radius: 7px; overflow: hidden; }
-      .lab-result { background: #163c56; }
-      :root[data-theme="dark"] .lab-result { background: #0c2536; }
+      .lab-result { background: #24383e; }
+      :root[data-theme="dark"] .lab-result { background: #17272c; }
       .experience-section { border-top: 1px solid var(--line); }
       .cv-inline { width: fit-content; margin-top: 25px; }
       .eccb-section {
@@ -876,7 +879,7 @@
       .eccb-main .eyebrow { color: var(--orange); }
       .eccb-main h2 { color: var(--ink); }
       .eccb-authors { color: var(--muted); }
-      .eccb-section .button-light { background: var(--forest); color: white; }
+      .eccb-section .button-light { background: var(--forest); color: var(--on-accent); }
       .eccb-section .light-link { color: var(--forest); }
       .poster-ticket { border-color: var(--line); background: var(--white); }
       .poster-ticket > span { color: var(--orange); }
@@ -1226,7 +1229,7 @@
                   <h2>Overview</h2>
                   <p>I am an early-career computational biology researcher working across comparative genomics, evolutionary cancer biology and genomic-variation analysis. My flagship study asks whether recurrent human TP53 cancer hotspots are unusually constrained across mammalian evolution.</p>
                   <p>Alongside this work, I design reproducible FASTQ-to-VCF workflows and evaluate them against Genome in a Bottle reference data. My experimental training in pharmaceutical analytical sciences helps me distinguish computational prioritization from functional validation and frame realistic follow-up experiments.</p>
-                  <p class="overview-direction">I am preparing for PhD research in comparative genomics, cancer genomics or computational genomics in Switzerland and Europe.</p>
+                  <p class="overview-direction">I am seeking PhD opportunities in Switzerland and across Europe where I can contribute to comparative, cancer and computational genomics, with a focus on evolutionary constraint, genomic variation and biologically testable questions.</p>
                 </div>
                 <aside class="impact-panel" aria-label="Impact at a glance">
                   <p class="impact-label">Impact at a glance</p>
@@ -1242,7 +1245,7 @@
                     <strong>1</strong>
                     <span>Published first-author chapter</span>
                   </a>
-                  <a href="#eccb">
+                  <a href="https://eccb.performedia.com/author/d10a853aeb92029f5d0245b4ca661e6841a87b17/?ref=speaker_pg" target="_blank" rel="noreferrer" aria-label="Open ECCB 2026 poster C-G.32 page">
                     <strong>C-G.32</strong>
                     <span>Accepted ECCB 2026 poster</span>
                   </a>
@@ -1683,7 +1686,7 @@
                           function setTheme(theme) {
                             root.dataset.theme = theme;
                             const dark = theme === 'dark';
-                            themeMeta?.setAttribute('content', dark ? '#101419' : '#fbfbf7');
+                            themeMeta?.setAttribute('content', dark ? '#0c0f11' : '#f6f3ec');
                             if (toggle) {
                               toggle.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
                               toggle.setAttribute('title', dark ? 'Switch to light mode' : 'Switch to dark mode');
