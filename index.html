@@ -1,368 +1,137 @@
-html = r'''<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#07131f" />
-  <meta name="description" content="Ritika Rajendra Rawat — Computational Biology Researcher working across comparative genomics, cancer genomics and evolutionary genomics." />
-  <meta name="keywords" content="Ritika Rajendra Rawat, Bioinformatics, Computational Biology, Comparative Genomics, Cancer Genomics, Evolutionary Genomics, TP53, ECCB 2026" />
-  <meta name="author" content="Ritika Rajendra Rawat" />
-  <title>Ritika Rajendra Rawat | Computational Biology Researcher</title>
+from pathlib import Path
+import re
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+src = Path("/mnt/data/index_redesigned.html")
+html = src.read_text(encoding="utf-8")
 
-  <style>
-    :root {
-      --bg:#07131f; --bg2:#0a1b2b; --panel:rgba(13,31,47,.72);
-      --text:#f4f8fb; --muted:#9db0bf; --line:rgba(180,214,231,.14);
-      --cyan:#55e6e0; --cyan2:#8cf4ef; --violet:#9b8cff; --lime:#b9f27c;
-      --max:1240px; --radius:24px; --shadow:0 28px 90px rgba(0,0,0,.28);
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{
-      background:
-        radial-gradient(circle at 75% 5%,rgba(85,230,224,.10),transparent 24rem),
-        radial-gradient(circle at 10% 35%,rgba(155,140,255,.08),transparent 28rem),var(--bg);
-      color:var(--text);font-family:Inter,sans-serif;line-height:1.65;overflow-x:hidden
-    }
-    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;
-      background-image:radial-gradient(rgba(255,255,255,.7) .55px,transparent .55px);
-      background-size:26px 26px;mask-image:linear-gradient(to bottom,black,transparent 85%);z-index:-1}
-    a{color:inherit;text-decoration:none} img{display:block;max-width:100%}
-    button{font:inherit}.container{width:min(92%,var(--max));margin:auto}
+# 1) Add Publications to navigation.
+html = html.replace(
+    '<li><a href="#research">Research</a></li><li><a href="#eccb">ECCB 2026</a></li>',
+    '<li><a href="#research">Research</a></li><li><a href="#publications">Publications</a></li><li><a href="#eccb">ECCB 2026</a></li>'
+)
 
-    header{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(7,19,31,.70);
-      backdrop-filter:blur(20px);border-bottom:1px solid rgba(180,214,231,.08)}
-    nav{height:76px;display:flex;align-items:center;justify-content:space-between}
-    .logo{font:500 13px "DM Mono",monospace;letter-spacing:.08em;color:var(--cyan)}
-    .logo span{color:var(--text)}
-    .nav-links{display:flex;gap:28px;list-style:none;font-size:12px;color:var(--muted)}
-    .nav-links a{position:relative;padding:8px 0;transition:color .25s}
-    .nav-links a:after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--cyan);transition:.25s}
-    .nav-links a:hover,.nav-links a.active{color:var(--text)}
-    .nav-links a:hover:after,.nav-links a.active:after{width:100%}
-    .nav-cta{border:1px solid rgba(85,230,224,.45);color:var(--cyan);padding:10px 16px;border-radius:999px;font-size:11px;transition:.25s}
-    .nav-cta:hover{background:var(--cyan);color:#06141e;transform:translateY(-2px)}
-    .menu{display:none;background:none;border:0;color:var(--text);font-size:24px;cursor:pointer}
+# 2) Add publication links to the TP53 ECCB research card.
+old = """<article class="research-card reveal"><div><div class="research-index">PROJECT / 01</div><h3>TP53 Evolutionary Conservation</h3><p>Comparative investigation of TP53 mutation hotspots across mammalian species, with emphasis on evolutionary conservation and functional constraint.</p></div><div class="research-link">ECCB 2026 · Poster</div></article>"""
+new = """<article class="research-card reveal">
+  <div>
+    <div class="research-index">PROJECT / 01</div>
+    <h3>TP53 Evolutionary Conservation</h3>
+    <p>Comparative investigation of TP53 mutation hotspots across mammalian species, with emphasis on evolutionary conservation and functional constraint.</p>
+  </div>
+  <div class="research-actions">
+    <a class="research-link" href="https://doi.org/10.21203/rs.3.rs-9299199/v1" target="_blank" rel="noopener">Publication ↗</a>
+    <a class="research-link" href="https://github.com/Rita1791" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</article>"""
+if old in html:
+    html = html.replace(old, new)
 
-    .hero{min-height:100vh;padding:150px 0 90px;position:relative;display:grid;grid-template-columns:1.08fr .92fr;gap:70px;align-items:center}
-    .hero:before{content:"";position:absolute;width:460px;height:460px;border-radius:50%;background:rgba(85,230,224,.07);filter:blur(40px);right:-120px;top:120px;pointer-events:none}
-    .eyebrow{font:500 11px "DM Mono",monospace;color:var(--cyan);letter-spacing:.13em;text-transform:uppercase;margin-bottom:22px}
-    .hero h1{font:800 clamp(50px,7.4vw,94px)/.93 Manrope,sans-serif;letter-spacing:-.065em;max-width:900px}
-    .hero h1 .accent{color:var(--cyan)}
-    .hero-copy{margin-top:30px;max-width:720px;color:var(--muted);font-size:18px}
-    .hero-copy strong{color:var(--text);font-weight:600}
-    .hero-actions{margin-top:34px;display:flex;gap:12px;flex-wrap:wrap}
-    .btn{display:inline-flex;align-items:center;gap:9px;padding:13px 18px;border-radius:999px;border:1px solid var(--line);font-size:12px;font-weight:700;transition:.28s}
-    .btn-primary{background:var(--cyan);color:#06141e;border-color:var(--cyan)}
-    .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(85,230,224,.20)}
-    .btn-ghost:hover{border-color:rgba(85,230,224,.5);color:var(--cyan);transform:translateY(-3px)}
-    .hero-meta{margin-top:42px;display:flex;gap:28px;flex-wrap:wrap}
-    .meta-item{display:flex;flex-direction:column;gap:3px}
-    .meta-item small{font:400 9px "DM Mono",monospace;color:#708595;text-transform:uppercase;letter-spacing:.1em}
-    .meta-item span{font-size:12px;color:#c9d6df}
-
-    .hero-visual{min-height:540px;position:relative;display:grid;place-items:center}
-    .orbit{position:absolute;border:1px solid rgba(85,230,224,.15);border-radius:50%;animation:spin 22s linear infinite}
-    .orbit.one{width:450px;height:450px}.orbit.two{width:350px;height:350px;border-color:rgba(155,140,255,.18);animation-direction:reverse;animation-duration:18s}
-    .orbit:after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 18px var(--cyan);top:10%;left:50%}
-    .portrait-shell{width:min(350px,72vw);aspect-ratio:1/1.12;position:relative;z-index:2;border:1px solid rgba(140,244,239,.35);
-      border-radius:38% 38% 20% 20%;padding:9px;background:linear-gradient(145deg,rgba(85,230,224,.20),rgba(155,140,255,.12),rgba(7,19,31,.8));
-      box-shadow:var(--shadow),0 0 80px rgba(85,230,224,.08);transform:rotate(2deg);animation:float 6s ease-in-out infinite}
-    .portrait-shell:before{content:"";position:absolute;inset:-15px;border:1px dashed rgba(85,230,224,.20);border-radius:inherit;animation:spin 30s linear infinite}
-    .portrait{width:100%;height:100%;object-fit:cover;object-position:center 18%;border-radius:31% 31% 15% 15%;filter:saturate(.9) contrast(1.03)}
-    .portrait-badge{position:absolute;left:-38px;bottom:38px;z-index:4;padding:14px 16px;border:1px solid var(--line);
-      background:rgba(8,24,37,.88);backdrop-filter:blur(15px);border-radius:16px;box-shadow:var(--shadow)}
-    .portrait-badge small{display:block;font:400 9px "DM Mono",monospace;color:var(--cyan);text-transform:uppercase}
-    .portrait-badge strong{display:block;margin-top:3px;font-size:13px}
-    .floating-chip{position:absolute;z-index:3;padding:8px 11px;border:1px solid var(--line);background:rgba(9,25,38,.82);
-      backdrop-filter:blur(12px);border-radius:999px;font:400 9px "DM Mono",monospace;color:#c5d3dc}
-    .chip-a{right:2%;top:15%;animation:float 5s 1s ease-in-out infinite}
-    .chip-b{left:1%;top:23%;animation:float 5s 2s ease-in-out infinite}
-    .chip-c{right:7%;bottom:14%;animation:float 5s .5s ease-in-out infinite}
-    .gene-line{position:absolute;width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.35;animation:pulse 3s ease-in-out infinite}
-
-    section{padding:120px 0;position:relative}
-    .section-head{display:flex;justify-content:space-between;gap:40px;align-items:end;margin-bottom:58px}
-    .section-kicker{font:500 10px "DM Mono",monospace;color:var(--cyan);text-transform:uppercase;letter-spacing:.14em;margin-bottom:14px}
-    .section-title{font:700 clamp(34px,5vw,60px)/1.02 Manrope,sans-serif;letter-spacing:-.045em;max-width:850px}
-    .section-intro{max-width:520px;color:var(--muted);font-size:15px}
-
-    .profile-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:70px}
-    .profile-text{color:#bdccd6;font-size:17px;max-width:720px}
-    .profile-text p+p{margin-top:20px}
-    .domain-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .domain{min-height:145px;padding:22px;border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));border-radius:20px;transition:.3s}
-    .domain:hover{transform:translateY(-5px);border-color:rgba(85,230,224,.35);background:rgba(85,230,224,.045)}
-    .domain small{font:400 9px "DM Mono",monospace;color:#718696}
-    .domain strong{display:block;margin-top:22px;font-size:14px}
-
-    .eccb-section{background:linear-gradient(180deg,#0a1b2b 0%,#07131f 100%);border-top:1px solid rgba(85,230,224,.08);border-bottom:1px solid rgba(85,230,224,.08);overflow:hidden}
-    .eccb-section:before{content:"ECCB 2026";position:absolute;right:-50px;top:60px;font:800 15vw Manrope,sans-serif;letter-spacing:-.08em;color:rgba(255,255,255,.018);pointer-events:none}
-    .eccb-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;position:relative;z-index:1}
-    .eccb-main{padding:42px;border:1px solid rgba(85,230,224,.20);background:linear-gradient(145deg,rgba(85,230,224,.075),rgba(155,140,255,.035));border-radius:28px;position:relative;overflow:hidden}
-    .status{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;border:1px solid rgba(185,242,124,.25);color:var(--lime);background:rgba(185,242,124,.06);font:500 9px "DM Mono",monospace;text-transform:uppercase}
-    .status:before{content:"";width:6px;height:6px;background:var(--lime);border-radius:50%;box-shadow:0 0 12px var(--lime)}
-    .eccb-main h3{margin:26px 0 16px;font:700 clamp(28px,3.2vw,43px)/1.08 Manrope,sans-serif;letter-spacing:-.04em;max-width:780px}
-    .eccb-main p{color:#b9c9d3;max-width:720px;font-size:14px}
-    .tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
-    .tag{padding:7px 10px;border:1px solid var(--line);border-radius:999px;color:#c6d4dd;font-size:10px}
-    .eccb-side{display:grid;gap:18px}
-    .eccb-card{padding:28px;border:1px solid var(--line);border-radius:24px;background:rgba(255,255,255,.025);transition:.3s}
-    .eccb-card:hover{transform:translateX(5px);border-color:rgba(85,230,224,.3)}
-    .eccb-card .label{font:400 9px "DM Mono",monospace;color:var(--cyan);text-transform:uppercase;letter-spacing:.1em}
-    .eccb-card strong{display:block;margin-top:9px;font-size:16px}
-    .eccb-card p{margin-top:7px;color:#9db0bf;font-size:12px}
-
-    .research-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .research-card{min-height:340px;padding:28px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
-      display:flex;flex-direction:column;justify-content:space-between;transition:.35s;position:relative;overflow:hidden}
-    .research-card:hover{transform:translateY(-8px);border-color:rgba(85,230,224,.30);box-shadow:0 22px 55px rgba(0,0,0,.18)}
-    .research-index{font:400 10px "DM Mono",monospace;color:var(--cyan)}
-    .research-card h3{margin-top:30px;font:600 27px/1.1 Manrope,sans-serif;letter-spacing:-.035em}
-    .research-card p{margin-top:14px;color:var(--muted);font-size:13px}
-    .research-link{margin-top:28px;font:400 9px "DM Mono",monospace;color:#7f96a6;text-transform:uppercase}
-
-    .featured{background:#081724}
-    .featured-layout{display:grid;grid-template-columns:.8fr 1.2fr;gap:55px;align-items:center}
-    .data-panel{padding:30px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(85,230,224,.055),rgba(255,255,255,.02))}
-    .data-header{font:400 9px "DM Mono",monospace;color:#6f8798;text-transform:uppercase;letter-spacing:.12em}
-    .stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
-    .stat{padding:18px;border:1px solid var(--line);border-radius:17px;background:rgba(0,0,0,.12)}
-    .stat strong{display:block;font:800 30px Manrope,sans-serif;letter-spacing:-.05em;color:var(--cyan)}
-    .stat span{display:block;margin-top:5px;font-size:10px;color:#93a8b7}
-    .featured-copy{color:#b9c9d3;font-size:15px}.featured-copy p+p{margin-top:18px}
-    .evidence{margin-top:28px;padding-left:20px;border-left:2px solid var(--cyan);color:#d9e4ea}.evidence strong{color:var(--cyan)}
-
-    .timeline{position:relative}.timeline:before{content:"";position:absolute;left:8px;top:0;bottom:0;width:1px;background:linear-gradient(var(--cyan),rgba(85,230,224,.08))}
-    .timeline-item{position:relative;padding:0 0 46px 48px}.timeline-item:before{content:"";position:absolute;left:3px;top:7px;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--cyan);box-shadow:0 0 18px rgba(85,230,224,.35)}
-    .timeline-year{font:400 9px "DM Mono",monospace;color:var(--cyan);text-transform:uppercase}
-    .timeline h3{margin-top:8px;font-size:20px}.timeline p{margin-top:8px;max-width:760px;color:var(--muted);font-size:13px}
-
-    .connect{padding-bottom:70px}
-    .connect-box{padding:55px;border:1px solid rgba(85,230,224,.22);border-radius:30px;
-      background:radial-gradient(circle at 85% 15%,rgba(85,230,224,.11),transparent 22rem),linear-gradient(145deg,rgba(255,255,255,.04),rgba(255,255,255,.015));
-      display:flex;justify-content:space-between;align-items:end;gap:40px}
-    .connect-box h2{margin-top:12px;font:700 clamp(34px,5vw,62px)/1 Manrope,sans-serif;letter-spacing:-.05em;max-width:760px}
-    .connect-box p{margin-top:18px;max-width:680px;color:var(--muted);font-size:14px}
-    .connect-actions{display:flex;gap:10px;flex-wrap:wrap}
-    footer{border-top:1px solid var(--line);padding:25px 0 35px;color:#607584;font:400 9px "DM Mono",monospace;display:flex;justify-content:space-between;gap:20px}
-
-    .reveal{opacity:0;transform:translateY(26px);transition:opacity .75s ease,transform .75s ease}
-    .reveal.visible{opacity:1;transform:none}.delay-1{transition-delay:.08s}.delay-2{transition-delay:.16s}.delay-3{transition-delay:.24s}
-    @keyframes float{0%,100%{transform:translateY(0) rotate(2deg)}50%{transform:translateY(-12px) rotate(2deg)}}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    @keyframes pulse{0%,100%{opacity:.2;transform:scaleX(.8)}50%{opacity:.8;transform:scaleX(1.1)}}
-
-    @media(max-width:900px){
-      .nav-links,.nav-cta{display:none}.menu{display:block}
-      .nav-links.open{display:flex;position:absolute;top:76px;left:0;right:0;padding:20px 4%;background:rgba(7,19,31,.96);border-bottom:1px solid var(--line);flex-direction:column;gap:15px}
-      .hero,.profile-grid,.eccb-layout,.featured-layout{grid-template-columns:1fr}
-      .hero{padding-top:125px;gap:40px}.hero-visual{min-height:470px}
-      .section-head{align-items:start;flex-direction:column}.research-grid{grid-template-columns:1fr 1fr}
-      .connect-box{align-items:start;flex-direction:column}
-    }
-    @media(max-width:620px){
-      section{padding:85px 0}.hero h1{font-size:clamp(45px,15vw,72px)}.hero-copy{font-size:15px}
-      .hero-meta{gap:18px}.hero-visual{min-height:390px}.orbit.one{width:330px;height:330px}.orbit.two{width:260px;height:260px}
-      .portrait-shell{width:250px}.portrait-badge{left:-5px;bottom:10px}
-      .domain-grid,.research-grid,.stats{grid-template-columns:1fr}.eccb-main{padding:27px}.connect-box{padding:30px}footer{flex-direction:column}
-    }
-    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
-  </style>
-</head>
-<body>
-<header>
-  <div class="container"><nav>
-    <a class="logo" href="#top">RR <span>/ BIOINFORMATICS</span></a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#research">Research</a></li><li><a href="#eccb">ECCB 2026</a></li>
-      <li><a href="#experience">Experience</a></li><li><a href="#connect">Connect</a></li>
-    </ul>
-    <a class="nav-cta" href="#connect">Contact ↗</a>
-    <button class="menu" id="menuBtn" aria-label="Open navigation">☰</button>
-  </nav></div>
-</header>
-
-<main id="top">
-<section class="hero container">
-  <div class="reveal">
-    <div class="eyebrow">Computational Biology · Research · Scientific Communication</div>
-    <h1>Ritika Rajendra <span class="accent">Rawat.</span></h1>
-    <p class="hero-copy"><strong>Computational Biology Researcher</strong> working across comparative genomics, cancer genomics and evolutionary genomics using computational approaches to investigate biological conservation, mutation and function.</p>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="#research">Explore Research →</a>
-      <a class="btn btn-ghost" href="#eccb">ECCB 2026 ↗</a>
-      <a class="btn btn-ghost" href="https://github.com/Rita1791" target="_blank" rel="noopener">GitHub ↗</a>
-    </div>
-    <div class="hero-meta">
-      <div class="meta-item"><small>Current focus</small><span>Sequence → evolution → function</span></div>
-      <div class="meta-item"><small>Research areas</small><span>Genomics · Cancer · Evolution</span></div>
-      <div class="meta-item"><small>2026</small><span>ECCB Poster + Volunteer</span></div>
-    </div>
+# 3) Add a dedicated Publications section before Scientific Experience.
+marker = '<section id="experience" class="section">'
+publication_section = """
+<section id="publications" class="section">
+  <div class="section-head reveal">
+    <div class="kicker">04 / PUBLICATIONS &amp; CODE</div>
+    <h2>Research you can inspect.</h2>
+    <p class="section-intro">Peer-reviewed work, preprints and reproducible computational projects — with direct links to the underlying scientific record and code.</p>
   </div>
 
-  <div class="hero-visual reveal delay-2">
-    <div class="orbit one"></div><div class="orbit two"></div>
-    <div class="gene-line" style="top:22%;left:2%"></div>
-    <div class="gene-line" style="bottom:24%;right:0;transform:rotate(35deg)"></div>
-    <span class="floating-chip chip-a">TP53 · EVOLUTION</span>
-    <span class="floating-chip chip-b">COMPUTATIONAL BIOLOGY</span>
-    <span class="floating-chip chip-c">ECCB 2026 · GENEVA</span>
-    <div class="portrait-shell">
-      <img class="portrait" src="./assets/img/ritika-headshot.jpg" alt="Ritika Rajendra Rawat">
-    </div>
-    <div class="portrait-badge"><small>Researcher</small><strong>Comparative · Cancer · Evolutionary Genomics</strong></div>
-  </div>
-</section>
-
-<section id="profile">
-<div class="container">
-  <div class="section-head reveal"><div><div class="section-kicker">01 / Profile</div><h2 class="section-title">Biology interpreted through computation.</h2></div>
-    <p class="section-intro">From sequence-level evidence to evolutionary interpretation — with an emphasis on reproducibility, biological reasoning and clear scientific communication.</p></div>
-  <div class="profile-grid">
-    <div class="profile-text reveal">
-      <p>My work sits at the intersection of biological sequence analysis, evolutionary reasoning and computational research. I am particularly interested in questions where comparative evidence can reveal functional constraint and biological significance.</p>
-      <p>My research interests span comparative genomics, cancer genomics and evolutionary genomics, with an emphasis on reproducible computational workflows and evidence-driven interpretation.</p>
-      <p>I am interested not only in obtaining computational results, but in understanding what those results mean biologically and communicating them clearly to researchers, collaborators and scientific audiences.</p>
-    </div>
-    <div class="domain-grid reveal delay-1">
-      <div class="domain"><small>01 / FIELD</small><strong>Comparative Genomics</strong></div>
-      <div class="domain"><small>02 / FIELD</small><strong>Cancer Genomics</strong></div>
-      <div class="domain"><small>03 / FIELD</small><strong>Evolutionary Genomics</strong></div>
-      <div class="domain"><small>04 / APPROACH</small><strong>Computational Biology</strong></div>
-    </div>
-  </div>
-</div>
-</section>
-
-<section id="eccb" class="eccb-section">
-<div class="container">
-  <div class="section-head reveal"><div><div class="section-kicker">02 / ECCB 2026</div><h2 class="section-title">Research presented. Conference experienced from both sides.</h2></div>
-    <p class="section-intro">Poster presenter and conference volunteer at ECCB 2026 — combining scientific communication, research networking and practical conference experience.</p></div>
-  <div class="eccb-layout">
-    <article class="eccb-main reveal">
-      <span class="status">Accepted contribution · First & Presenting Author</span>
-      <h3>Evolutionary Conservation and Functional Constraints of TP53 Mutation Hotspots Across Mammalian Species</h3>
-      <p>Poster research examining the evolutionary conservation and functional constraints surrounding TP53 mutation hotspots across mammalian species, connecting comparative sequence evidence with cancer-associated mutation patterns.</p>
-      <div class="tag-row"><span class="tag">Poster C-G.32</span><span class="tag">Poster Session 3</span><span class="tag">Comparative Genomics</span><span class="tag">Cancer Genomics</span><span class="tag">Evolutionary Genomics</span></div>
-      <div class="tag-row"><span class="tag">Co-author: Sarmani Nadar</span><span class="tag">Co-author: Gurismran Kaur Uppal</span></div>
-    </article>
-    <div class="eccb-side">
-      <article class="eccb-card reveal delay-1"><div class="label">Scientific role</div><strong>Poster Presenter</strong><p>Presenting the TP53 research during the dedicated ECCB poster session and discussing the work with researchers and attendees.</p></article>
-      <article class="eccb-card reveal delay-2"><div class="label">Conference role</div><strong>ECCB 2026 Volunteer</strong><p>Supporting conference operations, participant guidance, session-related activities and the smooth running of the scientific programme.</p></article>
-      <article class="eccb-card reveal delay-3"><div class="label">Scientific environment</div><strong>European Computational Biology Community</strong><p>Engaging directly with researchers, speakers, presenters and the wider computational biology community.</p></article>
-    </div>
-  </div>
-</div>
-</section>
-
-<section id="research">
-<div class="container">
-  <div class="section-head reveal"><div><div class="section-kicker">03 / Research</div><h2 class="section-title">Questions first. Computation second.</h2></div>
-    <p class="section-intro">A selection of research directions and computational work focused on extracting biologically meaningful evidence from genomic data.</p></div>
-  <div class="research-grid">
-    <article class="research-card reveal"><div><div class="research-index">PROJECT / 01</div><h3>TP53 Evolutionary Conservation</h3><p>Comparative investigation of TP53 mutation hotspots across mammalian species, with emphasis on evolutionary conservation and functional constraint.</p></div><div class="research-link">ECCB 2026 · Poster</div></article>
-    <article class="research-card reveal delay-1"><div><div class="research-index">PROJECT / 02</div><h3>Cancer Genomics</h3><p>Computational analysis of cancer-associated mutations and their relationship to conserved genomic regions and biological function.</p></div><div class="research-link">Genomic evidence →</div></article>
-    <article class="research-card reveal delay-2"><div><div class="research-index">PROJECT / 03</div><h3>Reproducible Bioinformatics</h3><p>Building transparent computational workflows that connect sequence-level analysis, statistical evaluation and biological interpretation.</p></div><div class="research-link">Computational workflows →</div></article>
-  </div>
-</div>
-</section>
-
-<section class="featured" id="evidence">
-<div class="container">
-  <div class="section-head reveal"><div><div class="section-kicker">04 / Featured Research</div><h2 class="section-title">When evolutionary conservation becomes evidence.</h2></div>
-    <p class="section-intro">Selected analysis snapshot from the TP53 comparative genomics project.</p></div>
-  <div class="featured-layout">
-    <div class="data-panel reveal"><div class="data-header">Analysis snapshot</div>
-      <div class="stats">
-        <div class="stat"><strong>56</strong><span>Mammalian sequences analysed</span></div>
-        <div class="stat"><strong>393</strong><span>Human TP53 positions evaluated</span></div>
-        <div class="stat"><strong>6 / 6</strong><span>Mutation hotspots conserved</span></div>
-        <div class="stat"><strong>4,225</strong><span>TCGA / cBioPortal mutation records</span></div>
+  <div class="publication-grid">
+    <article class="publication-card reveal">
+      <div class="publication-meta">PREPRINT · APRIL 2026 · DOI</div>
+      <h3>Evolutionary Conservation and Functional Constraint of TP53 Mutation Hotspots Across Mammalian Species</h3>
+      <p>First-author research investigating conservation and evolutionary constraint at canonical TP53 mutation hotspots across mammalian species.</p>
+      <div class="publication-actions">
+        <a class="btn btn-primary" href="https://doi.org/10.21203/rs.3.rs-9299199/v1" target="_blank" rel="noopener">Read publication ↗</a>
+        <a class="btn btn-ghost" href="https://www.researchgate.net/publication/403476498_Evolutionary_Conservation_and_Functional_Constraint_of_TP53_Mutation_Hotspots_Across_Mammalian_Species" target="_blank" rel="noopener">ResearchGate ↗</a>
       </div>
-    </div>
-    <div class="featured-copy reveal delay-1">
-      <p>The TP53 project investigates whether cancer-associated mutation hotspots exhibit stronger evolutionary conservation than surrounding regions. The analysis combines comparative sequence data with human cancer mutation information to examine the relationship between evolutionary constraint and mutation susceptibility.</p>
-      <p><strong>6/6 hotspots</strong> showed conservation across the analysed mammalian sequences.</p>
-      <p>Mean hotspot conservation was approximately <strong>1.000</strong>, compared with approximately <strong>0.934</strong> for the selected DBD controls.</p>
-      <div class="evidence">Statistical comparison: <strong>U = 819, p = 0</strong> in the reported analysis.</div>
-    </div>
+    </article>
+
+    <article class="publication-card reveal delay-1">
+      <div class="publication-meta">RESEARCH SOFTWARE · 2026 · GITHUB</div>
+      <h3>Benchmark-Aware WGS Variant Calling</h3>
+      <p>A reproducible GIAB-benchmarked WGS variant-calling workflow with regional validation, error analysis, publication-ready outputs and documented limitations.</p>
+      <div class="publication-actions">
+        <a class="btn btn-primary" href="https://github.com/Rita1791/Benchmark-aware-WGS-preventive-genomics" target="_blank" rel="noopener">Explore repository ↗</a>
+        <a class="btn btn-ghost" href="https://github.com/Rita1791" target="_blank" rel="noopener">GitHub profile ↗</a>
+      </div>
+    </article>
   </div>
-</div>
 </section>
 
-<section id="experience">
-<div class="container">
-  <div class="section-head reveal"><div><div class="section-kicker">05 / Scientific Experience</div><h2 class="section-title">Beyond the analysis.</h2></div>
-    <p class="section-intro">Scientific work also means presenting evidence, communicating ideas, collaborating with people and contributing to the environments in which research happens.</p></div>
-  <div class="timeline">
-    <div class="timeline-item reveal"><div class="timeline-year">2026 · ECCB</div><h3>Poster Presenter · First & Presenting Author</h3><p>Presenting research on evolutionary conservation and functional constraints of TP53 mutation hotspots across mammalian species.</p></div>
-    <div class="timeline-item reveal delay-1"><div class="timeline-year">2026 · ECCB</div><h3>Conference Volunteer</h3><p>Supporting the organisation and participant experience of a major European computational biology conference, including conference-floor and session-related responsibilities.</p></div>
-    <div class="timeline-item reveal delay-2"><div class="timeline-year">Ongoing</div><h3>Computational Biology Research</h3><p>Developing and validating computational approaches for genomic research, with particular interest in comparative and evolutionary interpretation.</p></div>
-  </div>
-</div>
-</section>
+"""
+if marker in html and 'id="publications"' not in html:
+    html = html.replace(marker, publication_section + marker)
 
-<section id="conference">
-<div class="container">
-  <div class="section-head reveal"><div><div class="section-kicker">06 / Conference Contribution</div><h2 class="section-title">Contributing to the scientific ecosystem.</h2></div>
-    <p class="section-intro">ECCB volunteering is presented here as practical experience in scientific conference operations, communication and participant support.</p></div>
-  <div class="research-grid">
-    <article class="research-card reveal"><div><div class="research-index">ROLE / 01</div><h3>Session & Room Support</h3><p>Supporting scientific sessions and helping maintain a smooth experience for speakers, presenters and attendees.</p></div><div class="research-link">Scientific programme</div></article>
-    <article class="research-card reveal delay-1"><div><div class="research-index">ROLE / 02</div><h3>Participant Guidance</h3><p>Helping participants navigate the conference environment, schedules and venue-related logistics.</p></div><div class="research-link">Conference operations</div></article>
-    <article class="research-card reveal delay-2"><div><div class="research-index">ROLE / 03</div><h3>Poster Area Support</h3><p>Supporting poster-area operations while simultaneously participating as a scientific poster presenter.</p></div><div class="research-link">Poster programme</div></article>
-  </div>
-</div>
-</section>
+# 4) Make the section numbering after inserting Publications coherent.
+html = html.replace('<div class="kicker">04 / SCIENTIFIC EXPERIENCE</div>', '<div class="kicker">05 / SCIENTIFIC EXPERIENCE</div>')
+html = html.replace('<div class="kicker">05 / CONFERENCE CONTRIBUTION</div>', '<div class="kicker">06 / CONFERENCE CONTRIBUTION</div>')
+html = html.replace('<div class="kicker">06 / CONNECT</div>', '<div class="kicker">07 / CONNECT</div>')
 
-<section id="connect" class="connect">
-<div class="container">
-  <div class="connect-box reveal">
-    <div><div class="section-kicker">07 / Connect</div><h2>Research conversations start somewhere.</h2>
-      <p>I am interested in connecting with researchers, computational biologists, bioinformaticians and scientific teams working on genomics, cancer biology, evolutionary biology and related computational questions.</p>
-    </div>
-    <div class="connect-actions">
-      <a class="btn btn-primary" href="mailto:ritika.rawat27@outlook.com">Start a conversation →</a>
-      <a class="btn btn-ghost" href="https://github.com/Rita1791" target="_blank" rel="noopener">GitHub ↗</a>
-    </div>
-  </div>
-</div>
-</section>
-</main>
+# 5) Add styling for research/publication action rows if not already present.
+style_marker = '</style>'
+extra_css = """
+.research-actions,
+.publication-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.research-actions .research-link {
+  margin-right: 4px;
+}
+.publication-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.publication-card {
+  position: relative;
+  padding: 28px;
+  border: 1px solid var(--line, rgba(255,255,255,.12));
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+  overflow: hidden;
+}
+.publication-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 90% 10%, rgba(79,209,255,.12), transparent 34%);
+}
+.publication-card h3 {
+  position: relative;
+  margin: 12px 0;
+}
+.publication-card p,
+.publication-meta,
+.publication-actions {
+  position: relative;
+}
+.publication-meta {
+  font: 500 11px/1.4 var(--mono, monospace);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  opacity: .68;
+}
+@media (max-width: 800px) {
+  .publication-grid { grid-template-columns: 1fr; }
+}
+"""
+if '.publication-grid {' not in html:
+    html = html.replace(style_marker, extra_css + "\n" + style_marker, 1)
 
-<footer class="container"><span>© 2026 Ritika Rajendra Rawat</span><span>COMPUTATIONAL BIOLOGY / GENOMICS / RESEARCH</span></footer>
+# 6) Add a clear publication/code CTA to the connect section if the exact GitHub link exists.
+html = html.replace(
+    '<a class="btn btn-ghost" href="https://github.com/Rita1791" target="_blank" rel="noopener">GitHub ↗</a>',
+    '<a class="btn btn-ghost" href="https://github.com/Rita1791" target="_blank" rel="noopener">GitHub ↗</a>\n      <a class="btn btn-ghost" href="https://doi.org/10.21203/rs.3.rs-9299199/v1" target="_blank" rel="noopener">Publication ↗</a>',
+    1
+)
 
-<script>
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
-  }, {threshold:.12});
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  const menuBtn = document.getElementById('menuBtn');
-  const navLinks = document.getElementById('navLinks');
-  menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
-  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
-
-  const sections = document.querySelectorAll('main section[id]');
-  const links = document.querySelectorAll('.nav-links a');
-  const navObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting){
-        links.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id));
-      }
-    });
-  }, {rootMargin:'-35% 0px -55% 0px', threshold:0});
-  sections.forEach(section => navObserver.observe(section));
-</script>
-</body>
-</html>
-'''
-path = "/mnt/data/index_redesigned.html"
-with open(path, "w", encoding="utf-8") as f:
-    f.write(html)
-print(f"Created: {path}")
+out = Path("/mnt/data/index_redesigned_v2.html")
+out.write_text(html, encoding="utf-8")
+print(f"Created: {out}")
 print(f"Size: {len(html):,} characters")
+print("Added: Publications navigation + TP53 publication link + ResearchGate link + WGS GitHub repository + GitHub profile links.")
