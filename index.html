@@ -222,6 +222,54 @@
   .publication-grid { grid-template-columns: 1fr; }
 }
 
+
+.contact-links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 26px;
+}
+.contact-link {
+  min-height: 82px;
+  padding: 15px 16px;
+  border: 1px solid var(--line, rgba(255,255,255,.12));
+  border-radius: 16px;
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  background: rgba(255,255,255,.035);
+  transition: transform .25s ease, border-color .25s ease, background .25s ease;
+}
+.contact-link:hover {
+  transform: translateY(-4px);
+  border-color: rgba(100,220,255,.55);
+  background: rgba(100,220,255,.07);
+}
+.contact-link small {
+  display: block;
+  font: 600 9px/1.2 var(--mono, monospace);
+  letter-spacing: .14em;
+  opacity: .55;
+  margin-bottom: 4px;
+}
+.contact-icon {
+  width: 32px; height: 32px;
+  display: grid; place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+}
+.contact-link b { opacity: .6; }
+.research-actions { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.research-link.muted { opacity:.45; }
+@media (max-width: 760px) {
+  .contact-links { grid-template-columns: 1fr; }
+}
+
 </style>
 </head>
 <body>
@@ -248,7 +296,8 @@
       <a class="btn btn-ghost" href="#eccb">ECCB 2026 ↗</a>
       <a class="btn btn-ghost" href="https://github.com/Rita1791" target="_blank" rel="noopener">GitHub ↗</a>
       <a class="btn btn-ghost" href="https://doi.org/10.21203/rs.3.rs-9299199/v1" target="_blank" rel="noopener">Publication ↗</a>
-    </div>
+    
+<a class="btn btn-ghost" href="assets/cv.pdf" download="Ritika_Rawat_Academic_CV.pdf">Download CV ↓</a></div>
     <div class="hero-meta">
       <div class="meta-item"><small>Current focus</small><span>Sequence → evolution → function</span></div>
       <div class="meta-item"><small>Research areas</small><span>Genomics · Cancer · Evolution</span></div>
@@ -324,11 +373,11 @@
   </div>
   <div class="research-actions">
     <a class="research-link" href="https://doi.org/10.21203/rs.3.rs-9299199/v1" target="_blank" rel="noopener">Publication ↗</a>
-    <a class="research-link" href="https://github.com/Rita1791" target="_blank" rel="noopener">GitHub ↗</a>
+    <a class="research-link" href="https://github.com/Rita1791/TP53-Evolutionary-Conservation-Mammals" target="_blank" rel="noopener">GitHub ↗</a>
   </div>
 </article>
-    <article class="research-card reveal delay-1"><div><div class="research-index">PROJECT / 02</div><h3>Cancer Genomics</h3><p>Computational analysis of cancer-associated mutations and their relationship to conserved genomic regions and biological function.</p></div><div class="research-link">Genomic evidence →</div></article>
-    <article class="research-card reveal delay-2"><div><div class="research-index">PROJECT / 03</div><h3>Reproducible Bioinformatics</h3><p>Building transparent computational workflows that connect sequence-level analysis, statistical evaluation and biological interpretation.</p></div><div class="research-link">Computational workflows →</div></article>
+    <article class="research-card reveal delay-1"><div><div class="research-index">PROJECT / 02</div><h3>Cancer Genomics</h3><p>Computational analysis of cancer-associated mutations and their relationship to conserved genomic regions and biological function.</p></div><div class="research-actions"><a class="research-link" href="https://github.com/Rita1791/Geneomelpha" target="_blank" rel="noopener">GitHub ↗</a><span class="research-link muted">Genomic evidence →</span></div></article>
+    <article class="research-card reveal delay-2"><div><div class="research-index">PROJECT / 03</div><h3>Reproducible Bioinformatics</h3><p>Building transparent computational workflows that connect sequence-level analysis, statistical evaluation and biological interpretation.</p></div><div class="research-actions"><a class="research-link" href="https://github.com/Rita1791/Elephant-TP53-Hotspot-Mapping" target="_blank" rel="noopener">GitHub ↗</a><span class="research-link muted">Computational workflows →</span></div></article>
   </div>
 </div>
 </section>
@@ -352,6 +401,35 @@
       <p>Mean hotspot conservation was approximately <strong>1.000</strong>, compared with approximately <strong>0.934</strong> for the selected DBD controls.</p>
       <div class="evidence">Statistical comparison: <strong>U = 819, p = 0</strong> in the reported analysis.</div>
     </div>
+  </div>
+</div>
+</section>
+
+
+<section id="publications">
+<div class="container">
+  <div class="section-head reveal">
+    <div><div class="section-kicker">04 / Publications & Code</div><h2 class="section-title">Research you can inspect.</h2></div>
+    <p class="section-intro">Direct access to scientific outputs and the code behind selected computational projects.</p>
+  </div>
+  <div class="publication-grid">
+    <article class="publication-card reveal">
+      <div class="publication-meta">PREPRINT · FIRST AUTHOR</div>
+      <h3>Evolutionary Conservation and Functional Constraint of TP53 Mutation Hotspots Across Mammalian Species</h3>
+      <p>Comparative evolutionary analysis of recurrent human TP53 cancer mutation hotspots across 56 mammalian species.</p>
+      <div class="publication-actions">
+        <a class="btn btn-primary" href="https://doi.org/10.21203/rs.3.rs-9299199/v1" target="_blank" rel="noopener">Read publication ↗</a>
+        <a class="btn btn-ghost" href="https://github.com/Rita1791/TP53-Evolutionary-Conservation-Mammals" target="_blank" rel="noopener">View code ↗</a>
+      </div>
+    </article>
+    <article class="publication-card reveal delay-1">
+      <div class="publication-meta">RESEARCH SOFTWARE · WGS</div>
+      <h3>Benchmark-aware WGS preventive genomics</h3>
+      <p>GIAB-benchmarked WGS variant-calling workflow with documented validation and computational outputs.</p>
+      <div class="publication-actions">
+        <a class="btn btn-primary" href="https://github.com/Rita1791/benchmark-aware-wgs-preventive-genomics" target="_blank" rel="noopener">Explore repository ↗</a>
+      </div>
+    </article>
   </div>
 </div>
 </section>
@@ -386,9 +464,19 @@
     <div><div class="section-kicker">07 / Connect</div><h2>Research conversations start somewhere.</h2>
       <p>I am interested in connecting with researchers, computational biologists, bioinformaticians and scientific teams working on genomics, cancer biology, evolutionary biology and related computational questions.</p>
     </div>
-    <div class="connect-actions">
-      <a class="btn btn-primary" href="mailto:ritika.rawat27@outlook.com">Start a conversation →</a>
-      <a class="btn btn-ghost" href="https://github.com/Rita1791" target="_blank" rel="noopener">GitHub ↗</a>
+    <div class="contact-links">
+      <a class="contact-link email" href="mailto:ritika.rawat27@outlook.com">
+        <span class="contact-icon">✉</span><span><small>EMAIL</small>Email</span><b>↗</b>
+      </a>
+      <a class="contact-link github" href="https://github.com/Rita1791" target="_blank" rel="noopener">
+        <span class="contact-icon">⌘</span><span><small>CODE</small>GitHub</span><b>↗</b>
+      </a>
+      <a class="contact-link linkedin" href="https://www.linkedin.com/in/ritika-rawat-551107219/" target="_blank" rel="noopener">
+        <span class="contact-icon">in</span><span><small>NETWORK</small>LinkedIn</span><b>↗</b>
+      </a>
+      <a class="contact-link cv" href="assets/cv.pdf" download="Ritika_Rawat_Academic_CV.pdf">
+        <span class="contact-icon">CV</span><span><small>DOCUMENT</small>Download CV</span><b>↓</b>
+      </a>
     </div>
   </div>
 </div>
